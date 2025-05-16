@@ -32,7 +32,7 @@ header h1 {
 }
 
 .personagem-container {
-    display: flex;
+    display: none;
     justify-content: space-between;
     /* separa os dois extremos */
     align-items: flex-start;
