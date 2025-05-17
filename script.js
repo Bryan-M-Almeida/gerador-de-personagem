@@ -1,63 +1,105 @@
-/* container do personagem */
 const container = document.querySelector(".personagem-container");
+const botao = document.getElementById("gerarBtn");
+const loader = document.getElementById("loader");
 
-/* gerador */
-const botao = document.querySelector(".btn");
+const nomeEl = document.querySelector(".nome");
+const idadeEl = document.querySelector(".idade");
+const racaEl = document.querySelector(".raca");
+const classeEl = document.querySelector(".classe");
+const historiaEl = document.querySelector(".historia");
 
-/* personagem */
-const nome = document.querySelector(".nome");
-const idade = document.querySelector(".idade");
-const raca = document.querySelector(".raca");
-const classe = document.querySelector(".classe");
-const historia = document.querySelector(".historia");
+const forcaEl = document.querySelector(".forca");
+const destrezaEl = document.querySelector(".destreza");
+const inteligenciaEl = document.querySelector(".inteligencia");
+const carismaEl = document.querySelector(".carisma");
+const sabedoriaEl = document.querySelector(".sabedoria");
+const constituicaoEl = document.querySelector(".constituicao");
 
-const forca = document.querySelector(".forca");
-const destreza = document.querySelector(".destreza");
-const inteligencia = document.querySelector(".inteligencia");
-const carisma = document.querySelector(".carisma");
-const sabedoria = document.querySelector(".sabedoria");
-const constituicao = document.querySelector(".constituicao");
+let dataCache = null;
 
+async function loadJSON() {
+    if (!dataCache) {
+        const res = await fetch("personagem.json");
+        dataCache = await res.json();
+    }
+    return dataCache;
+}
 
+async function gerarHistoriaIA(nome, raca, classe) {
+    const prompt = `Crie uma história curta e criativa para um personagem de RPG chamado ${nome}, que é um ${raca} da classe ${classe}. Responda com apenas o texto da história, em português.`;
 
-fetch('./personagem.json')
-    .then(res => res.json())
-    .then(data => {
-        botao.addEventListener("click", function () {
-
-            /* personagem gerador*/
-            let nomeRandom = Math.floor(Math.random() * 281);
-            let sobrenomeRandom = Math.floor(Math.random() * 79);
-            let idadeRandom = Math.floor(Math.random() * 100);
-            let racaRandom = Math.floor(Math.random() * 11);
-            let classeRandom = Math.floor(Math.random() * 10);
-            let historiaRandom = Math.floor(Math.random() * 10);
-
-            /* atributos gerador */
-            let forcaRandom = Math.floor(Math.random() * 100);
-            let destrezaRandom = Math.floor(Math.random() * 100);
-            let inteligenciaRandom = Math.floor(Math.random() * 100);
-            let carismaRandom = Math.floor(Math.random() * 100);
-            let sabedoriaRandom = Math.floor(Math.random() * 100);
-            let constituicaoRandom = Math.floor(Math.random() * 100);
-
-            /* container */
-            container.style.display = "flex";
-
-            /* personagem */
-            nome.innerHTML = data.personagem.nome[nomeRandom] + " " + data.personagem.sobrenome[sobrenomeRandom];
-            idade.innerHTML = idadeRandom;
-            raca.innerHTML = data.personagem.raca[racaRandom];
-            classe.innerHTML = data.personagem.classe[classeRandom];
-            historia.innerHTML = data.personagem.historia[historiaRandom];
-
-            /* personagem */
-            forca.innerHTML = forcaRandom;
-            destreza.innerHTML = destrezaRandom;
-            inteligencia.innerHTML = inteligenciaRandom;
-            carisma.innerHTML = carismaRandom;
-            sabedoria.innerHTML = sabedoriaRandom;
-            constituicao.innerHTML = constituicaoRandom;
-
+    try {
+        const resposta = await fetch("http://localhost:11434/v1/chat/completions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: "llama2",
+                messages: [
+                    {
+                        role: "system",
+                        content: "Você é um gerador de histórias de RPG. Sempre responda com uma história curta, criativa e em português."
+                    },
+                    {
+                        role: "user",
+                        content: prompt
+                    }
+                ],
+                temperature: 0.9
+            })
         });
-    });
+
+        if (!resposta.ok) throw new Error("IA offline");
+
+        const data = await resposta.json();
+        return data.choices[0].message.content.trim();
+    } catch (err) {
+        console.warn("Servidor de IA offline. Usando fallback aleatório.");
+        const fallbackData = await loadJSON();
+        const historias = fallbackData.personagem.historia;
+        return historias[Math.floor(Math.random() * historias.length)];
+    }
+}
+
+botao.addEventListener("click", async () => {
+    container.style.display = "none"; // Oculta o personagem anterior
+    loader.style.display = "block";   // Mostra o loading
+
+    const data = await loadJSON();
+    const p = data.personagem;
+
+    const nomeIdx = Math.floor(Math.random() * p.nome.length);
+    const sobrenomeIdx = Math.floor(Math.random() * p.sobrenome.length);
+    const idadeVal = Math.floor(Math.random() * 82) + 18;
+    const racaIdx = Math.floor(Math.random() * p.raca.length);
+    const classeIdx = Math.floor(Math.random() * p.classe.length);
+
+    const nomeCompleto = `${p.nome[nomeIdx]} ${p.sobrenome[sobrenomeIdx]}`;
+    const raca = p.raca[racaIdx];
+    const classe = p.classe[classeIdx];
+
+    const historia = await gerarHistoriaIA(nomeCompleto, raca, classe);
+
+    const forca = Math.ceil(Math.random() * 100);
+    const destreza = Math.ceil(Math.random() * 100);
+    const inteligencia = Math.ceil(Math.random() * 100);
+    const carisma = Math.ceil(Math.random() * 100);
+    const sabedoria = Math.ceil(Math.random() * 100);
+    const constituicao = Math.ceil(Math.random() * 100);
+
+    nomeEl.textContent = nomeCompleto;
+    idadeEl.textContent = idadeVal;
+    racaEl.textContent = raca;
+    classeEl.textContent = classe;
+    historiaEl.textContent = historia;
+
+    forcaEl.textContent = forca;
+    destrezaEl.textContent = destreza;
+    inteligenciaEl.textContent = inteligencia;
+    carismaEl.textContent = carisma;
+    sabedoriaEl.textContent = sabedoria;
+    constituicaoEl.textContent = constituicao;
+
+    container.style.display = "flex";
+    loader.style.display = "none"; // Esconder loader
+});
+
