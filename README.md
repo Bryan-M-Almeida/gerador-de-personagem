@@ -24,9 +24,7 @@ Projeto simples e estiloso que gera personagens aleatórios para RPG com nome, i
 
 ![image](https://github.com/user-attachments/assets/1726580c-10ab-427a-a3e6-b32d9dbf9000)
 
-
-![image](https://github.com/user-attachments/assets/d31db374-b66c-42dd-b48a-9430fc7f8cab)
-
+![image](https://github.com/user-attachments/assets/572f6e81-319a-4552-9b30-7868bc73bdee)
 
 ![image](https://github.com/user-attachments/assets/b4e52398-0356-4ab8-b3ed-c6e0c6122296)
 
