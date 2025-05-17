@@ -57,6 +57,7 @@ Geração por tipo (ex: só elfo guerreiro)
 )
 
 📸 Preview
-![image](https://github.com/user-attachments/assets/389cc783-369b-442b-aca7-ea615eada38f)
+![image](https://github.com/user-attachments/assets/f376ead5-56f7-4db4-aa29-9b5dbc043e48)
+
 
 
