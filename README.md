@@ -20,7 +20,7 @@ Projeto simples e estiloso que gera personagens aleatórios para RPG com nome, i
 ---
 
 📸 Preview
-![Logo](issue/logo.png)
+![image](https://github.com/user-attachments/assets/1726580c-10ab-427a-a3e6-b32d9dbf9000)
 
 
 ## 📁 Estrutura
@@ -58,7 +58,6 @@ Salvar favoritos no navegador
 
 Geração por tipo (ex: só elfo guerreiro)
 
-)
 
 
 
