@@ -19,6 +19,10 @@ Projeto simples e estiloso que gera personagens aleatórios para RPG com nome, i
 
 ---
 
+📸 Preview
+![Logo](issue/logo.png)
+
+
 ## 📁 Estrutura
 
 ```bash
@@ -56,8 +60,6 @@ Geração por tipo (ex: só elfo guerreiro)
 
 )
 
-📸 Preview
-![Logo](issue/logo.png)
 
 
 
