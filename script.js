@@ -69,7 +69,7 @@ botao.addEventListener("click", async () => {
 
     const nomeIdx = Math.floor(Math.random() * p.nome.length);
     const sobrenomeIdx = Math.floor(Math.random() * p.sobrenome.length);
-    const idadeVal = Math.floor(Math.random() * 82) + 18;
+    const idadeVal = Math.floor(Math.random() * 30) + 18;
     const racaIdx = Math.floor(Math.random() * p.raca.length);
     const classeIdx = Math.floor(Math.random() * p.classe.length);
 
